@@ -8,6 +8,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -30,8 +31,8 @@ public class CrawlJob implements Job {
     }
 
     private void crawl() {
-        String blockno = "F6B1B3";
-        String apitoken = "password";
+        String blockno = "F77624";
+        String apitoken = "pw";
         String etherscanUrl = String.format("https://api.etherscan.io/api?module=proxy&action=eth_getBlockByNumber&tag=%s&boolean=true&apikey=%s", blockno, apitoken);
 
         String res = "";
@@ -56,9 +57,15 @@ public class CrawlJob implements Job {
         }
     }
     private void DataFormatter(JSONObject jsonObject) {
-        try{
+        try {
+
+            JSONObject res = (JSONObject) jsonObject.get("result");
+            JSONArray txArr = (JSONArray) res.get("transactions");
+
+
+
             FileWriter file = new FileWriter("./j.json");
-            file.write(jsonObject.toJSONString());
+            file.write(txArr.toJSONString());
             file.flush();
             file.close();
         }
